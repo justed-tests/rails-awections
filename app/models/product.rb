@@ -6,4 +6,8 @@ class Product < ApplicationRecord
   def auctions?
     auctions.any?
   end
+
+  def auction
+    auctions.last
+  end
 end
