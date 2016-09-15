@@ -7,6 +7,10 @@ class Product < ApplicationRecord
     auctions.any?
   end
 
+  def on_auction?
+    !!auction
+  end
+
   def auction
     auctions.last
   end

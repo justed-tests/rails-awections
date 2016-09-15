@@ -13,4 +13,8 @@ class Auction < ApplicationRecord
   def current_bid
     top_bid ? top_bid.value : value
   end
+
+  def ended?
+    Time.now > ends_at
+  end
 end

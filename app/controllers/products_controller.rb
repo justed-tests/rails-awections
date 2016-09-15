@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :transfer]
 
   # GET /products
   # GET /products.json
@@ -58,6 +58,15 @@ class ProductsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to products_url, notice: 'Product was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def transfer
+    if @product.auction.ended?
+      @product.update(user: @product.auction.top_bid.user)
+      redirect_to @product, notice: 'You successfully claimed the product'
+    else
+      redirect_to @product, alert: 'Something wrong'
     end
   end
 
