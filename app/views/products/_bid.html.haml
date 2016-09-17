@@ -6,12 +6,33 @@
       %p
         %strong
           =@product.auction.current_bid
-          -if @product.auction.top_bid && @product.auction.top_bid.user == current_user
-            Your Bid is last
+          -if @product.auction.top_bid.present?
+            -if @product.auction.top_bid && @product.auction.top_bid.user == current_user
+              Your Bid is last
+            -else
+              You were outbid
           -else
-            You were outbid
+            There is no bids yet
+
       %p
         Ends at: #{@product.auction.ends_at.to_formatted_s(:short)}
       %p
         =f.text_field :value
         =f.button class: 'btn btn-primary'
+
+  :javascript
+    window.App = {
+      websocket_url: "ws://#{request.host}:#{request.port}/"
+    }
+
+    var userId = "#{current_user.id}"
+    var auctionId = "#{@product.auction.id}"
+    var form = $('#new_bid')
+
+    $(function () {
+      var auctionSocket = new AuctionSocket(
+        userId,
+        auctionId,
+        form
+      )
+    })

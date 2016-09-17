@@ -1,0 +1,9 @@
+{
+  "extends": "standard",
+  "globals": {
+    "WebSocket": true ,
+    "$": true ,
+    "App": true ,
+    "Mustache": true 
+  }
+}

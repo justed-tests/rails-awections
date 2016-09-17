@@ -4,6 +4,7 @@ Rails.application.routes.draw do
   root 'products#index'
 
   devise_for :users
+
   resources :products do
     resources :auctions, only: [:create] do
       resources :bids, only: [:create]
