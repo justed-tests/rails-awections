@@ -9,6 +9,7 @@ var AuctionSocket = window.AuctionSocket = function (userId, auctionId, form) {
 
 AuctionSocket.prototype.initBinds = function () {
   var _this = this
+  console.log(this)
 
   this.form.submit(function (e) {
     e.stopPropagation()
@@ -22,7 +23,7 @@ AuctionSocket.prototype.initBinds = function () {
 
     switch (tokens[0]) {
       case 'bidok':
-        _this.bid(tokens[1])
+        _this.bidok(tokens[1])
         break
       case 'underbid':
         _this.underbid(tokens[1])
@@ -58,13 +59,13 @@ AuctionSocket.prototype.bidok = function () {
 
 AuctionSocket.prototype.outbid = function (value) {
   this.form.find('.message strong').html(
-    'Your bid is under ' + value + '.'
+    'You were outbid. It is now ' + value + '.'
   )
 }
 
 AuctionSocket.prototype.underbid = function (value) {
   this.form.find('.message strong').html(
-    'You were underbid. It is now ' + value + '.'
+    'Your bid is under ' + value + '.'
   )
 }
 

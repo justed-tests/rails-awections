@@ -9,7 +9,11 @@ class PlaceBidTest < MiniTest::Test
     @user = User.create! email: 'some@one.org', password: 'password'
     @another_user = User.create! email: 'some@another.org', password: 'password'
     @product = Product.create! name: 'product', user: user
-    @auction = Auction.create! value: 10, product: product
+    @auction = Auction.create!(
+      value: 10,
+      product: product,
+      ends_at: Time.now + 24.hours
+    )
   end
 
   def test_it_places_a_bid
@@ -21,5 +25,16 @@ class PlaceBidTest < MiniTest::Test
   def test_fails_to_bid_under_current_value
     service = PlaceBid.new value: 7, user: another_user, auction: auction
     refute service.execute, 'bid should not placed'
+  end
+
+  def test_notifies_if_auction_ended
+    service = PlaceBid.new value: 11, user: user, auction: auction
+    service.execute
+    another_service = PlaceBid.new value: 888, user: user, auction: auction
+
+    Timecop.travel(Time.now + 25.hours)
+    another_service.execute
+
+    assert_equal :won, another_service.status
   end
 end
